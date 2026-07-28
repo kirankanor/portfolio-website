@@ -1,0 +1,127 @@
+/* Dark theme with a single accent color, matching the minimalist style in the reference video */
+
+:root {
+    --bg: #0d0d0d;
+    --bg-alt: #161616;
+    --text: #f0f0f0;
+    --text-muted: #a0a0a0;
+    --accent: #6ee7b7; /* change this one value to re-theme the whole site */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.6;
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 3rem;
+    background: rgba(13, 13, 13, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 10;
+}
+
+.nav-links a {
+    color: var(--text);
+    text-decoration: none;
+    margin-left: 2rem;
+}
+
+.nav-links a:hover {
+    color: var(--accent);
+}
+
+section {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+}
+
+.hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 3rem;
+}
+
+.hero h2 {
+    color: var(--accent);
+    font-weight: 400;
+    margin: 0.5rem 0;
+}
+
+/* The dot-matrix canvas needs an explicit CSS size -- the JS reads this size
+   via getBoundingClientRect() to know how many dots to generate and where. */
+canvas.dot-text {
+    width: 100%;
+    max-width: 900px;
+    height: 200px;
+    margin: 0 auto;
+    display: block;
+}
+
+.skills-grid, .projects-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.skill-badge, .tag {
+    background: var(--bg-alt);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+}
+
+.project-card {
+    background: var(--bg-alt);
+    border-radius: 12px;
+    padding: 1.5rem;
+    width: 100%;
+}
+
+.project-card a {
+    color: var(--accent);
+    display: inline-block;
+    margin-top: 1rem;
+}
+
+/* This is the fade/slide-in effect you saw as sections enter the viewport in the video.
+   The CSS just defines the "hidden" and "visible" states; script.js toggles the class. */
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-muted);
+}
