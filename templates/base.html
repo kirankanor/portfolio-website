@@ -8,6 +8,15 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
+    <!-- Decorative drifting clouds. aria-hidden because it's purely visual, not content. -->
+    <div class="clouds-bg" aria-hidden="true">
+        <span class="cloud cloud-1"></span>
+        <span class="cloud cloud-2"></span>
+        <span class="cloud cloud-3"></span>
+        <span class="cloud cloud-4"></span>
+        <span class="cloud cloud-5"></span>
+    </div>
+
     <nav class="navbar">
         <span class="logo">{{ profile.name }}</span>
         <div class="nav-links">

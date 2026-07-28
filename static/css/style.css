@@ -73,7 +73,7 @@ section {
 canvas.dot-text {
     width: 100%;
     max-width: 900px;
-    height: 200px;
+    height: 320px;
     margin: 0 auto;
     display: block;
 }
@@ -124,4 +124,71 @@ footer {
     text-align: center;
     padding: 2rem;
     color: var(--text-muted);
+}
+
+/* Fixed full-screen layer that holds the drifting clouds. z-index: -1 keeps
+   it behind every normal (non-positioned) element on the page, since
+   negative z-index paints before in-flow content in the stacking order.
+   pointer-events: none means it never blocks clicks on real content. */
+.clouds-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* The cloud shape: one oval body plus two overlapping ovals (the
+   pseudo-elements) positioned above it to form a puffy silhouette.
+   Percentages are used inside the pseudo-elements so the shape stays
+   proportional no matter what width/height each .cloud-N sets below. */
+.cloud {
+    position: absolute;
+    left: 0;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 50%;
+    filter: blur(2px);
+}
+
+.cloud::before,
+.cloud::after {
+    content: "";
+    position: absolute;
+    background: inherit;
+    border-radius: 50%;
+}
+
+.cloud::before {
+    top: -40%;
+    left: 15%;
+    width: 60%;
+    height: 100%;
+}
+
+.cloud::after {
+    top: -25%;
+    left: 45%;
+    width: 50%;
+    height: 90%;
+}
+
+/* Each cloud gets its own size, vertical position, speed, and start offset.
+   Speeds are deliberately different (45s-85s) so they never move in sync.
+   Negative animation-delay makes a cloud start already partway through its
+   animation, so on page load they appear staggered instead of lined up. */
+.cloud-1 { top: 8%;  width: 180px; height: 70px; animation: drift-cloud 55s linear infinite; animation-delay: -10s; }
+.cloud-2 { top: 22%; width: 260px; height: 100px; opacity: 0.7; animation: drift-cloud 75s linear infinite; animation-delay: -35s; }
+.cloud-3 { top: 40%; width: 140px; height: 55px; animation: drift-cloud 45s linear infinite; animation-delay: -5s; }
+.cloud-4 { top: 60%; width: 220px; height: 85px; opacity: 0.5; animation: drift-cloud 85s linear infinite; animation-delay: -50s; }
+.cloud-5 { top: 75%; width: 160px; height: 60px; animation: drift-cloud 65s linear infinite; animation-delay: -22s; }
+
+/* Slides a cloud from just off the left edge to just off the right edge.
+   The 300px overshoot on both ends makes sure the whole cloud (including
+   its blurred edge) is fully offscreen before it "reappears" on the left. */
+@keyframes drift-cloud {
+    from { transform: translateX(-300px); }
+    to   { transform: translateX(calc(100vw + 300px)); }
 }

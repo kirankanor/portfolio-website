@@ -15,15 +15,15 @@ function initDotText() {
 
 function setupDotCanvas(canvas) {
     const ctx = canvas.getContext("2d");
-    const text = canvas.dataset.text || "RAG | DEVELOPER";
+    const text = canvas.dataset.text || "IMPOSSIBLE TO IGNORE";
 
     // Two colors to randomly assign to each dot -- this is what produces the
     // stippled two-tone look instead of a single flat color.
     const palette = ["#ff7a3d", "#1a1a2e"];
 
     // How far apart we sample the letter shape. Bigger = fewer, chunkier dots.
-    const GRID_STEP = 1;
-    const DOT_SIZE = 2;
+    const GRID_STEP = 2;
+    const DOT_SIZE = 3;
 
     // How close the mouse needs to be to push a dot, and how strong that push is.
     const REPEL_RADIUS = 60;
@@ -53,17 +53,32 @@ function setupDotCanvas(canvas) {
     function buildParticles() {
         // Step 1: draw the text once, off-screen (in memory only), just to
         // read back which pixels belong to a letter.
+        // Splitting on "|" lets data-text="IMPOSSIBLE|TO IGNORE" render as
+        // two stacked lines instead of one long line.
+        const lines = text.split("|");
+
         const offscreen = document.createElement("canvas");
         offscreen.width = width;
         offscreen.height = height;
         const offCtx = offscreen.getContext("2d");
 
-        const fontSize = Math.min(width / (text.length * 0.6), height * 0.6);
+        // Size the font off the longest line so it still fits the canvas width.
+        const longestLine = lines.reduce((a, b) => (a.length > b.length ? a : b));
+        const fontSize = Math.min(
+            width / (longestLine.length * 0.6),
+            (height / lines.length) * 0.75
+        );
         offCtx.font = `900 ${fontSize}px sans-serif`;
         offCtx.textAlign = "center";
         offCtx.textBaseline = "middle";
         offCtx.fillStyle = "#fff";
-        offCtx.fillText(text, width / 2, height / 2);
+
+        // Stack lines evenly around the vertical center of the canvas.
+        const lineHeight = fontSize * 1.1;
+        const startY = height / 2 - (lineHeight * (lines.length - 1)) / 2;
+        lines.forEach((line, i) => {
+            offCtx.fillText(line, width / 2, startY + i * lineHeight);
+        });
 
         const imageData = offCtx.getImageData(0, 0, width, height).data;
 
